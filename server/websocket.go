@@ -11,9 +11,9 @@ type connWs struct {
 	c *websocket.Conn
 }
 
-func StartWebSocket(p *Plugin) {
+func (p *Plugin) StartWebSocket() {
 	go func() {
-		http.HandleFunc("/ws", ws)
+		http.HandleFunc("/ws", p.ws)
 		log.Fatal(http.ListenAndServe("0.0.0.0:8989", nil))
 	}()
 }
@@ -24,13 +24,21 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-func ws(w http.ResponseWriter, r *http.Request) {
+func (p *Plugin) ws(w http.ResponseWriter, r *http.Request) {
 	c, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Print("upgrade:", err)
+		p.API.LogError("Error upgrade conn to web socket", "err", err.Error())
+		p.writeAPIError(w, &APIErrorResponse{ID: "", Message: "Can't upgrade to web socket", StatusCode: http.StatusInternalServerError})
 		return
 	}
 	defer c.Close()
+	appUser := NewAppUser(p, c)
+	defer appUser.Leave()
+	if err := p.NewAppUser(appUser); err != nil {
+		p.API.LogError("Error create new user", "err", err.Error())
+		p.writeAPIError(w, &APIErrorResponse{ID: "", Message: "Can't create user", StatusCode: http.StatusInternalServerError})
+		return
+	}
 	for {
 		mt, message, err := c.ReadMessage()
 		if err != nil {
