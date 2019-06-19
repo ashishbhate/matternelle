@@ -6,6 +6,6 @@ import (
 
 func main() {
 	p := &Plugin{}
-	StartWebSocket(p)
+	p.StartWebSocket()
 	plugin.ClientMain(p)
 }
