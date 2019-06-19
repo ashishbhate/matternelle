@@ -1,2 +1,2 @@
-export const id = 'com.mattermost.sample-plugin';
+export const id = 'com.gitlab.itk.fr.matternelle';
 export const version = '0.1.0';
