@@ -23,4 +23,8 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 	fmt.Fprintf(w, "Hello, world!")
 }
 
+func (p *Plugin) OnActivate() error {
+	return p.registerCommand()
+}
+
 // See https://developers.mattermost.com/extend/plugins/server/reference/
