@@ -7,9 +7,13 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+type connWs struct {
+	c *websocket.Conn
+}
+
 func StartWebSocket(p *Plugin) {
 	go func() {
-		http.HandleFunc("/ws", echo)
+		http.HandleFunc("/ws", ws)
 		log.Fatal(http.ListenAndServe("0.0.0.0:8989", nil))
 	}()
 }
@@ -20,7 +24,7 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-func echo(w http.ResponseWriter, r *http.Request) {
+func ws(w http.ResponseWriter, r *http.Request) {
 	c, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Print("upgrade:", err)
