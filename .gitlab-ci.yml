@@ -1,0 +1,16 @@
+image: circleci/golang:1.12-node
+
+stages:
+  - test
+  - build
+
+lint:
+  stage: test
+  script:
+    - make check-style
+  
+tests:
+  stage: test
+  script:
+    - make test
+    
