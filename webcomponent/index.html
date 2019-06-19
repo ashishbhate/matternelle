@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <!-- Load polyfills -->
+  <script 
+    src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"
+    defer>
+  </script> 
+
+  <!-- Load components via WebComponents.waitFor -->
+  <script type="module">
+    window.WebComponents = window.WebComponents || { 
+      waitFor(cb){ addEventListener('WebComponentsReady', cb) }
+    } 
+    WebComponents.waitFor(async () => { 
+      import('./src/matternelle-element.js');
+    });
+  </script>
+  
+  <!-- Change stuff here for your app -->
+  <meta name="description" content="matternelle-element">
+  <meta name="theme-color" content="#ffffff">
+  <title>matternelle-element</title>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta charset="UTF-8">
+</head>
+<body>
+  
+  <matternelle-element>
+    <!-- Check for JavaScript -->
+    <p id="jsyes"></p>
+    <script type="text/javascript">
+      document.getElementById('jsyes').innerHTML='Loading...';
+    </script>
+    <noscript>
+      Could not render the custom element. Check that JavaScript is enabled.
+    </noscript>
+  </matternelle-element>
+</body>
