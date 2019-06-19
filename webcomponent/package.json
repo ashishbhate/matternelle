@@ -1,0 +1,19 @@
+{
+  "name": "matternelle",
+  "version": "0.1.0",
+  "description": "link your web app with your mattermost",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mattermost",
+    "webcomponent"
+  ],
+  "author": "itk.fr",
+  "license": "MIT",
+  "dependencies": {
+    "@webcomponents/webcomponentsjs": "=2.2.10",
+    "lit-element": "=2.2.0"
+  }
+}
