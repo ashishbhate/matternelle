@@ -4,6 +4,6 @@ var manifest = struct {
 	Id      string
 	Version string
 }{
-	Id:      "com.mattermost.sample-plugin",
+	Id:      "com.gitlab.itk.fr.matternelle",
 	Version: "0.1.0",
 }

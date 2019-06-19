@@ -1,7 +1,7 @@
 {
-    "id": "com.mattermost.sample-plugin",
-    "name": "Sample Plugin",
-    "description": "This plugin serves as a starting point for writing a Mattermost plugin.",
+    "id": "com.gitlab.itk.fr.matternelle",
+    "name": "Matternelle Plugin",
+    "description": "",
     "version": "0.1.0",
     "server": {
         "executables": {
