@@ -12,7 +12,7 @@ import (
 func (p *Plugin) registerCommand() error {
 	if err := p.API.RegisterCommand(&model.Command{
 		Trigger:          "matternelle",
-		DisplayName: "Matternelle",
+		DisplayName:      "Matternelle",
 		AutoComplete:     true,
 		AutoCompleteHint: "[command]",
 		AutoCompleteDesc: "Available command : init",
@@ -31,7 +31,7 @@ func (p *Plugin) registerCommand() error {
 func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*model.CommandResponse, *model.AppError) {
 
 	if strings.HasPrefix(args.Command, "/matternelle init") {
-			 p.StoreChannelId(args.ChannelId)
+		p.StoreChannelId(args.ChannelId)
 		return &model.CommandResponse{
 			ResponseType: model.COMMAND_RESPONSE_TYPE_IN_CHANNEL,
 			Text:         fmt.Sprintf("Starting chat: " + args.Command),

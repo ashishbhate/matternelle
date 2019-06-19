@@ -4,21 +4,21 @@ import (
 	"strconv"
 )
 
-const nbUsersChatKey = "nbUsersChat"
+const nbUsersChatKey = "nbChatUser"
 
-func (p *Plugin) AddUserChat() error {
-	return p.updateNbUsersChat(func(value int) int {
+func (p *Plugin) AddChatUser() error {
+	return p.updateNbChatUsers(func(value int) int {
 		return value + 1
 	})
 }
 
-func (p *Plugin) RemoveUserChat() error {
-	return p.updateNbUsersChat(func(value int) int {
+func (p *Plugin) RemoveChatUser() error {
+	return p.updateNbChatUsers(func(value int) int {
 		return value - 1
 	})
 }
 
-func (p *Plugin) GetNbUsersChat() (int, error) {
+func (p *Plugin) GetNbChatUsers() (int, error) {
 	value, err := p.API.KVGet(nbUsersChatKey)
 	if err != nil {
 		return 0, err
@@ -34,8 +34,8 @@ func (p *Plugin) GetNbUsersChat() (int, error) {
 	return nbUsersChat, nil
 }
 
-func (p *Plugin) updateNbUsersChat(transform func(int) int) error {
-	nbUsersChat, err := p.GetNbUsersChat()
+func (p *Plugin) updateNbChatUsers(transform func(int) int) error {
+	nbUsersChat, err := p.GetNbChatUsers()
 	if err != nil {
 		return err
 	}

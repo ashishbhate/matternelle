@@ -24,6 +24,7 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 }
 
 func (p *Plugin) OnActivate() error {
-	return  p.registerCommand()
+	return p.registerCommand()
 }
+
 // See https://developers.mattermost.com/extend/plugins/server/reference/
