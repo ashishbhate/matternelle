@@ -32,13 +32,11 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 
 	if strings.HasPrefix(args.Command, "/matternelle init") {
 		p.StoreChannelId(args.ChannelId)
-		return &model.CommandResponse{
-			ResponseType: model.COMMAND_RESPONSE_TYPE_IN_CHANNEL,
-			Text:         fmt.Sprintf("Starting chat: " + args.Command),
-		}, nil
+		p.PostPluginMessage(fmt.Sprintf("Starting chat: %s", args.Command))
+		return &model.CommandResponse{}, nil
 	}
 	return &model.CommandResponse{
 		ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
-		Text:         fmt.Sprintf("Unknown command: " + args.Command),
+		Text:         fmt.Sprintf("Unknown command: %s", args.Command),
 	}, nil
 }
