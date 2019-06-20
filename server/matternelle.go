@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/pkg/errors"
 )
 
@@ -10,6 +8,7 @@ func (p *Plugin) NewAppUser(u *AppUser) error {
 	if _, err := p.PostPluginMessage(u, "New app user connected"); err != nil {
 		return errors.Wrap(err, "can't post msg of new user app to MM")
 	}
+	p.Users = append(p.Users, u)
 	return nil
 }
 
@@ -17,11 +16,18 @@ func (p *Plugin) AppUserLeave(u *AppUser) error {
 	if _, err := p.PostPluginMessage(u, "App user disconnected"); err != nil {
 		return errors.Wrap(err, "can't post msg of user app leave to MM")
 	}
+	var newUsers []*AppUser
+	for _, user := range p.Users {
+		if u != user {
+			newUsers = append(newUsers, user)
+		}
+	}
+	p.Users = newUsers
 	return nil
 }
 
 func (p *Plugin) NewMessageFromAppUser(user *AppUser, msg string) error {
-	postID, err := p.PostPluginMessage(user, fmt.Sprintf("New message from app user: %s", msg))
+	postID, err := p.PostPluginMessage(user, msg)
 	if err != nil {
 		return errors.Wrap(err, "can't post msg of user app msg to MM")
 	}

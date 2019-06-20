@@ -16,6 +16,7 @@ type Plugin struct {
 	plugin.MattermostPlugin
 
 	BotUserID string
+	Users     []*AppUser
 
 	// configurationLock synchronizes access to the configuration.
 	configurationLock sync.RWMutex
