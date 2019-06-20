@@ -32,7 +32,15 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 
 	if strings.HasPrefix(args.Command, "/matternelle init") {
 		p.StoreChannelId(args.ChannelId)
-		p.PostPluginMessage(fmt.Sprintf("Starting chat: %s", args.Command))
+		p.PostPluginMessage(nil, fmt.Sprintf("Init plugin: %s", args.Command))
+		return &model.CommandResponse{}, nil
+	} else if strings.HasPrefix(args.Command, "/matternelle on") {
+		p.AddChatUser()
+		p.PostPluginMessage(nil, fmt.Sprintf("Starting chat: %s", args.Command))
+		return &model.CommandResponse{}, nil
+	} else if strings.HasPrefix(args.Command, "/matternelle off") {
+		p.RemoveChatUser()
+		p.PostPluginMessage(nil, fmt.Sprintf("Finish chat: %s", args.Command))
 		return &model.CommandResponse{}, nil
 	}
 	return &model.CommandResponse{

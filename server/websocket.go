@@ -53,7 +53,7 @@ func (p *Plugin) ws(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if cmd.Command == "msg" {
-			p.NewMessageFromAppUser(cmd.Msg)
+			p.NewMessageFromAppUser(appUser, cmd.Msg)
 			appUser.SendMessage("server" + cmd.Msg)
 		} else {
 			appUser.SendMessage("error : unknown command")
