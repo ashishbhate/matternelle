@@ -16,7 +16,7 @@ func (p *Plugin) registerCommand() error {
 		DisplayName:      "Matternelle",
 		AutoComplete:     true,
 		AutoCompleteHint: "[command]",
-		AutoCompleteDesc: "Available command : init",
+		AutoCompleteDesc: "Available commands: init, on, off",
 	}); err != nil {
 		return errors.Wrap(err, "failed to register command")
 	}

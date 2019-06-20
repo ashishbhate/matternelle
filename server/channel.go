@@ -1,6 +1,9 @@
 package main
 
-import "github.com/pkg/errors"
+import (
+	"fmt"
+	"github.com/pkg/errors"
+)
 
 const channelIdKey = "channelId"
 
@@ -11,10 +14,10 @@ func (p *Plugin) StoreChannelId(channelId string) error {
 func (p *Plugin) GetChannelId() (string, error) {
 	channelId, err := p.API.KVGet(channelIdKey)
 	if err != nil {
-		return "", errors.Wrap(err, "can't KVGet GetChannelId")
+		return "", errors.Wrap(err, fmt.Sprintf("can't get key %s from KV Store", channelIdKey))
 	}
 	if channelId != nil {
 		return string(channelId), nil
 	}
-	return "", errors.New("channel id not found in KVStore")
+	return "", nil
 }
