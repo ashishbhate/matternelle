@@ -17,7 +17,7 @@ export class MatternelleElement extends LitElement {
     }
 
     initWS() {
-        const socket = new WebSocket('ws://127.0.0.1:8989/ws');
+        const socket = new WebSocket('ws://127.0.0.1:8989/ws'); //'ws://127.0.0.1:8065/plugins/com.gitlab.itk.fr.matternelle/ws'
         socket.onerror = function(error) {
             console.error(error);
         };
@@ -33,11 +33,11 @@ export class MatternelleElement extends LitElement {
 
             // Lorsque le serveur envoi un message.
             this.onmessage = function(event) {
-                console.log('Message:', event.data);
+                console.log('Message:', JSON.parse(event.data));
             };
 
             // Envoi d'un message vers le serveur.
-            this.send('Hello world!');
+            this.send(`{"command":"msg", "msg":"Hello world!"}`);
         };
     }
 
