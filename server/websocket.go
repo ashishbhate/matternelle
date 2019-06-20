@@ -39,10 +39,11 @@ func (p *Plugin) ws(w http.ResponseWriter, r *http.Request) {
 	}
 	defer c.Close()
 	appUser := NewAppUser(p, c)
+	appUser.SendNbChatUser()
 	defer appUser.Leave()
-	if err := p.NewAppUser(appUser); err != nil {
+	err = p.NewAppUser(appUser)
+	if err != nil {
 		p.API.LogError("Error create new user", "err", err.Error())
-		p.writeAPIError(w, &APIErrorResponse{ID: "", Message: "Can't create user", StatusCode: http.StatusInternalServerError})
 		return
 	}
 	for {
@@ -54,7 +55,7 @@ func (p *Plugin) ws(w http.ResponseWriter, r *http.Request) {
 		}
 		if cmd.Command == "msg" {
 			p.NewMessageFromAppUser(appUser, cmd.Msg)
-			appUser.SendMessage("server" + cmd.Msg)
+			appUser.SendMessage("server : " + cmd.Msg)
 		} else {
 			appUser.SendMessage("error : unknown command")
 		}

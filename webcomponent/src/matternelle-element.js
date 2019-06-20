@@ -3,45 +3,78 @@ import { LitElement, html } from 'lit-element';
 export class MatternelleElement extends LitElement {
     static get properties() {
         return {
-            message: { type: String },
-            pie: { type: Boolean }
+            enable: { type: Boolean },
+            msgToSend: { type: String },
+            msg: { type: Array }
         };
     }
 
     constructor() {
         super();
+        this.enable = false;
+        this.msgToSend = '';
+        this.msg = [];
         this.initWS();
-        this.loadComplete = false;
-        this.message = 'Hello World from LitElement';
-        this.pie = false;
     }
 
     initWS() {
-        const socket = new WebSocket('ws://127.0.0.1:8989/ws'); //'ws://127.0.0.1:8065/plugins/com.gitlab.itk.fr.matternelle/ws'
-        socket.onerror = function(error) {
+        this.msgToSend = '';
+        this.msg = [];
+        this.socket = new WebSocket('ws://127.0.0.1:8989/ws'); //'ws://127.0.0.1:8065/plugins/com.gitlab.itk.fr.matternelle/ws'
+        this.socket.onerror = error => {
             console.error(error);
         };
 
-        // Lorsque la connexion est établie.
-        socket.onopen = function(event) {
+        this.socket.onopen = () => {
             console.log('Connexion établie.');
+        };
 
-            // Lorsque la connexion se termine.
-            this.onclose = function(event) {
-                console.log('Connexion terminé.');
-            };
+        this.socket.onclose = () => {
+            console.log('Connexion terminé.');
+            setTimeout(() => {
+                this.initWS();
+            }, 3000);
+        };
 
-            // Lorsque le serveur envoi un message.
-            this.onmessage = function(event) {
-                console.log('Message:', JSON.parse(event.data));
-            };
-
-            // Envoi d'un message vers le serveur.
-            this.send(`{"command":"msg", "msg":"Hello world!"}`);
+        this.socket.onmessage = event => {
+            const msg = JSON.parse(event.data);
+            if (
+                msg.command === 'nbChatUser' &&
+                msg.nbChatUser !== undefined &&
+                msg.nbChatUser > 0
+            ) {
+                this.enable = true;
+            }
+            this.msg = [...this.msg, msg];
+            console.log('Message:', msg);
         };
     }
 
+    handleInput(e) {
+        this.msgToSend = e.target.value;
+    }
+
+    sendMsg() {
+        const msg = { command: 'msg', msg: this.msgToSend, byAppUser: true };
+        this.msg = [...this.msg, msg];
+        this.socket.send(JSON.stringify(msg));
+        this.msgToSend = '';
+    }
+
     render() {
+        const msgTemplates = this.msg
+            .filter(i => i.command === 'msg')
+            .map(
+                i =>
+                    html`
+                        <li class="${i.byAppUser ? 'byAppUser' : ''}">
+                            ${i.msg}
+                        </li>
+                    `
+            );
+        if (!this.enable) {
+            return html``;
+        }
         return html`
             <style>
                 :host {
@@ -50,65 +83,22 @@ export class MatternelleElement extends LitElement {
                 :host([hidden]) {
                     display: none;
                 }
+                .byAppUser {
+                    text-align: right;
+                }
             </style>
 
-            <h1>Start LitElement!</h1>
-            <p>${this.message}</p>
+            <ul>
+                ${msgTemplates}
+            </ul>
 
             <input
-                name="myinput"
-                id="myinput"
-                type="checkbox"
-                ?checked="${this.pie}"
-                @change="${this.togglePie}"
+                type="text"
+                .value=${this.msgToSend}
+                @input=${this.handleInput}
             />
-
-            <label for="myinput">I like pie.</label>
-
-            ${this.pie
-                ? html`
-                      <lazy-element></lazy-element>
-                  `
-                : html``}
+            <button @click=${this.sendMsg}>+</button>
         `;
-    }
-
-    /**
-     * Implement firstUpdated to perform one-time work on first update:
-     * - Call a method to load the lazy element if necessary
-     * - Focus the checkbox
-     */
-    firstUpdated() {
-        console.log('first update');
-        this.loadLazy();
-
-        const myInput = this.shadowRoot.getElementById('myinput');
-        myInput.focus();
-    }
-
-    /**
-     * Event handler. Gets called whenever the checkbox fires a `change` event.
-     * - Toggle whether to display <lazy-element>
-     * - Call a method to load the lazy element if necessary
-     */
-    togglePie(e) {
-        this.pie = !this.pie;
-        this.loadLazy();
-    }
-
-    async loadLazy() {
-        console.log('loadLazy');
-        if (this.pie && !this.loadComplete) {
-            return import('./lazy-element.js')
-                .then(LazyElement => {
-                    this.loadComplete = true;
-                    console.log('LazyElement loaded');
-                })
-                .catch(reason => {
-                    this.loadComplete = false;
-                    console.log('LazyElement failed to load', reason);
-                });
-        }
     }
 }
 
