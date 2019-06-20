@@ -14,6 +14,9 @@ func (p *Plugin) PostPluginMessage(user *AppUser, msg string) (string, error) {
 	if err != nil {
 		return "", errors.Wrap(err, "can't get channel id in postPluginMessage")
 	}
+	if channelID == "" {
+		return "", nil
+	}
 	post, err2 := p.API.CreatePost(&model.Post{
 		UserId:    p.BotUserID,
 		ChannelId: channelID,
