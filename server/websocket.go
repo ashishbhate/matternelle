@@ -24,6 +24,12 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
+type Command struct {
+	Command    string `json:"command"`
+	Msg        string `json:"msg,omitempty"`
+	NbChatUser int    `json:"nbChatUser,omitempty"`
+}
+
 func (p *Plugin) ws(w http.ResponseWriter, r *http.Request) {
 	c, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -40,12 +46,17 @@ func (p *Plugin) ws(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	for {
-		mt, message, err := c.ReadMessage()
+		cmd := &Command{}
+		err := c.ReadJSON(cmd)
 		if err != nil {
-			log.Println("read:", err)
-			break
+			p.API.LogError("websocket read json:", "err", err.Error())
+			return
 		}
-		log.Printf("recv: %s", message)
-
+		if cmd.Command == "msg" {
+			p.NewMessageFromAppUser(cmd.Msg)
+			appUser.SendMessage("server" + cmd.Msg)
+		} else {
+			appUser.SendMessage("error : unknown command")
+		}
 	}
 }

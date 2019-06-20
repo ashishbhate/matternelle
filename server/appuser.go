@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/gorilla/websocket"
 )
 
@@ -23,9 +21,9 @@ func (u *AppUser) Leave() {
 }
 
 func (u *AppUser) SendNbChatUser(nb int) error {
-	return u.c.WriteJSON([]byte(fmt.Sprintf(`{"nbChatUser":%d}`, nb)))
+	return u.c.WriteJSON(Command{Command: "nbChatUser", NbChatUser: nb})
 }
 
 func (u *AppUser) SendMessage(msg string) error {
-	return u.c.WriteJSON([]byte(fmt.Sprintf(`{"msg":"%s"}`, msg)))
+	return u.c.WriteJSON(Command{Command: "msg", Msg: msg})
 }
