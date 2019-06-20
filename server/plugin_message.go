@@ -2,22 +2,26 @@ package main
 
 import (
 	"github.com/mattermost/mattermost-server/model"
+	"github.com/pkg/errors"
 )
 
 func (p *Plugin) PostPluginMessage(user *AppUser, msg string) (string, error) {
-	var rootId string
+	rootID := ""
 	if user != nil {
-		rootId = user.postId
+		rootID = user.postId
 	}
-	channelId, err := p.GetChannelId()
+	channelID, err := p.GetChannelId()
 	if err != nil {
-		return "", err
+		return "", errors.Wrap(err, "can't get channel id in postPluginMessage")
 	}
-	post, err := p.API.CreatePost(&model.Post{
+	post, err2 := p.API.CreatePost(&model.Post{
 		UserId:    p.BotUserID,
-		ChannelId: channelId,
-		RootId:    rootId,
+		ChannelId: channelID,
+		RootId:    rootID,
 		Message:   msg,
 	})
-	return post.Id, err
+	if err2 != nil {
+		return "", errors.Wrap(err2, "can't create post in postPluginMessage")
+	}
+	return post.Id, nil
 }
