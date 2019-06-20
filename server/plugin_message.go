@@ -4,15 +4,20 @@ import (
 	"github.com/mattermost/mattermost-server/model"
 )
 
-func (p *Plugin) PostPluginMessage(msg string) error {
+func (p *Plugin) PostPluginMessage(user *AppUser, msg string) (string, error) {
+	var rootId string
+	if user != nil {
+		rootId = user.postId
+	}
 	channelId, err := p.GetChannelId()
 	if err != nil {
-		return err
+		return "", err
 	}
-	_, err = p.API.CreatePost(&model.Post{
+	post, err := p.API.CreatePost(&model.Post{
 		UserId:    p.BotUserID,
 		ChannelId: channelId,
+		RootId:    rootId,
 		Message:   msg,
 	})
-	return err
+	return post.Id, err
 }
