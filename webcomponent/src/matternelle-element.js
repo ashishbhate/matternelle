@@ -58,8 +58,20 @@ export class MatternelleElement extends LitElement {
         this.state = STATE_INPUT;
     }
 
+    handleClose() {
+        this.state = STATE_SHOW;
+    }
+
     handleInput(e) {
         this.msgToSend = e.target.value;
+    }
+
+    handleKeyPress(e) {
+        if (e.target.value !== '') {
+            if (e.key === 'Enter') {
+                this.sendMsg();
+            }
+        }
     }
 
     sendMsg() {
@@ -87,21 +99,27 @@ export class MatternelleElement extends LitElement {
                 <style>
                     :host {
                         display: block;
-                        max-width: 500px;
-                        position: absolute;
+                        position: fixed;
                         bottom: 20%;
                         right: 20px;
-                        background-color: #fefefe;
-                        border: 1px solid #ddd;
-                        padding: 20px;
-                        list-style: none;
                     }
                     :host([hidden]) {
                         display: none;
                     }
+                    .btn {
+                        background-color: #4bda4b;
+                        color: #d460db;
+                        border-radius: 50%;
+                        width: 100px;
+                        height: 100px;
+                        border: none;
+                        font-weight: bold;
+                        font-size: 1.2em;
+                        cursor: pointer;
+                    }
                 </style>
 
-                <button @click=${this.start}>START</button>
+                <button class="btn" @click=${this.start}>HELP</button>
             `;
         }
         return html`
@@ -109,7 +127,7 @@ export class MatternelleElement extends LitElement {
                 :host {
                     display: block;
                     max-width: 500px;
-                    position: absolute;
+                    position: fixed;
                     bottom: 20%;
                     right: 20px;
                     background-color: #fefefe;
@@ -119,6 +137,17 @@ export class MatternelleElement extends LitElement {
                 }
                 :host([hidden]) {
                     display: none;
+                }
+                .closeBtn {
+                    position: absolute;
+                    top: -15px;
+                    right: -15px;
+                    background-color: #fefefe;
+                    border: 1px solid #ddd;
+                    border-radius: 50%;
+                    width: 30px;
+                    height: 30px;
+                    cursor: pointer;
                 }
                 .listMsg {
                     list-style: inherit;
@@ -130,6 +159,8 @@ export class MatternelleElement extends LitElement {
                 }
             </style>
 
+            <button class="closeBtn" @click=${this.handleClose}>x</button>
+
             <ul class="listMsg">
                 ${msgTemplates}
             </ul>
@@ -138,6 +169,7 @@ export class MatternelleElement extends LitElement {
                 type="text"
                 .value=${this.msgToSend}
                 @input=${this.handleInput}
+                @keypress=${this.handleKeyPress}
             />
             <button @click=${this.sendMsg}>+</button>
         `;
