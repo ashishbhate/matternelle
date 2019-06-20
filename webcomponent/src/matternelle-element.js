@@ -1,9 +1,13 @@
 import { LitElement, html } from 'lit-element';
 
+const STATE_HIDDEN = 'hidden';
+const STATE_SHOW = 'show';
+const STATE_INPUT = 'input';
+
 export class MatternelleElement extends LitElement {
     static get properties() {
         return {
-            enable: { type: Boolean },
+            state: { type: String }, //hidden, show, input
             msgToSend: { type: String },
             msg: { type: Array }
         };
@@ -11,7 +15,7 @@ export class MatternelleElement extends LitElement {
 
     constructor() {
         super();
-        this.enable = false;
+        this.state = STATE_HIDDEN;
         this.msgToSend = '';
         this.msg = [];
         this.initWS();
@@ -43,11 +47,15 @@ export class MatternelleElement extends LitElement {
                 msg.nbChatUser !== undefined &&
                 msg.nbChatUser > 0
             ) {
-                this.enable = true;
+                this.state = STATE_SHOW;
             }
             this.msg = [...this.msg, msg];
             console.log('Message:', msg);
         };
+    }
+
+    start() {
+        this.state = STATE_INPUT;
     }
 
     handleInput(e) {
@@ -72,23 +80,57 @@ export class MatternelleElement extends LitElement {
                         </li>
                     `
             );
-        if (!this.enable) {
+        if (this.state === STATE_HIDDEN) {
             return html``;
+        } else if (this.state === STATE_SHOW) {
+            return html`
+                <style>
+                    :host {
+                        display: block;
+                        max-width: 500px;
+                        position: absolute;
+                        bottom: 20%;
+                        right: 20px;
+                        background-color: #fefefe;
+                        border: 1px solid #ddd;
+                        padding: 20px;
+                        list-style: none;
+                    }
+                    :host([hidden]) {
+                        display: none;
+                    }
+                </style>
+
+                <button @click=${this.start}>START</button>
+            `;
         }
         return html`
             <style>
                 :host {
                     display: block;
+                    max-width: 500px;
+                    position: absolute;
+                    bottom: 20%;
+                    right: 20px;
+                    background-color: #fefefe;
+                    border: 1px solid #ddd;
+                    padding: 20px;
+                    list-style: none;
                 }
                 :host([hidden]) {
                     display: none;
+                }
+                .listMsg {
+                    list-style: inherit;
+                    margin: 0;
+                    padding: 0;
                 }
                 .byAppUser {
                     text-align: right;
                 }
             </style>
 
-            <ul>
+            <ul class="listMsg">
                 ${msgTemplates}
             </ul>
 

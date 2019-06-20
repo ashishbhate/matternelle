@@ -4,6 +4,8 @@
   "description": "link your web app with your mattermost",
   "main": "index.js",
   "scripts": {
+    "start": "npm run build && cd ../public/demo/ && polymer serve",
+    "build": "rollup -c && cp dist/matternelle.js ../public/demo/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -15,5 +17,16 @@
   "dependencies": {
     "@webcomponents/webcomponentsjs": "=2.2.10",
     "lit-element": "=2.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "=7.4.5",
+    "@babel/plugin-proposal-class-properties": "=7.4.4",
+    "@babel/plugin-proposal-decorators": "=7.4.4",
+    "@babel/preset-env": "=7.4.5",
+    "@babel/preset-typescript": "=7.3.3",
+    "polymer-cli": "^1.9.10",
+    "rollup": "=1.15.6",
+    "rollup-plugin-babel": "=4.3.2",
+    "rollup-plugin-node-resolve": "=5.0.3"
   }
 }
