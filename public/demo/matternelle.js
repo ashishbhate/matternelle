@@ -2304,7 +2304,7 @@ var index = (function (exports) {
       initWS() {
         this.msgToSend = '';
         this.msg = [];
-        this.socket = new WebSocket('ws://127.0.0.1:8989/ws'); //'ws://127.0.0.1:8065/plugins/com.gitlab.itk.fr.matternelle/ws'
+        this.socket = new WebSocket('ws://10.0.10.3:8989/ws'); //'ws://127.0.0.1:8065/plugins/com.gitlab.itk.fr.matternelle/ws'
 
         this.socket.onerror = error => {
           console.error(error);
@@ -2337,8 +2337,20 @@ var index = (function (exports) {
         this.state = STATE_INPUT;
       }
 
+      handleClose() {
+        this.state = STATE_SHOW;
+      }
+
       handleInput(e) {
         this.msgToSend = e.target.value;
+      }
+
+      handleKeyPress(e) {
+        if (e.target.value !== '') {
+          if (e.key === 'Enter') {
+            this.sendMsg();
+          }
+        }
       }
 
       sendMsg() {
@@ -2366,21 +2378,27 @@ var index = (function (exports) {
                 <style>
                     :host {
                         display: block;
-                        max-width: 500px;
-                        position: absolute;
+                        position: fixed;
                         bottom: 20%;
                         right: 20px;
-                        background-color: #fefefe;
-                        border: 1px solid #ddd;
-                        padding: 20px;
-                        list-style: none;
                     }
                     :host([hidden]) {
                         display: none;
                     }
+                    .btn {
+                        background-color: #4bda4b;
+                        color: #d460db;
+                        border-radius: 50%;
+                        width: 100px;
+                        height: 100px;
+                        border: none;
+                        font-weight: bold;
+                        font-size: 1.2em;
+                        cursor: pointer;
+                    }
                 </style>
 
-                <button @click=${this.start}>START</button>
+                <button class="btn" @click=${this.start}>HELP</button>
             `;
         }
 
@@ -2389,7 +2407,7 @@ var index = (function (exports) {
                 :host {
                     display: block;
                     max-width: 500px;
-                    position: absolute;
+                    position: fixed;
                     bottom: 20%;
                     right: 20px;
                     background-color: #fefefe;
@@ -2399,6 +2417,17 @@ var index = (function (exports) {
                 }
                 :host([hidden]) {
                     display: none;
+                }
+                .closeBtn {
+                    position: absolute;
+                    top: -15px;
+                    right: -15px;
+                    background-color: #fefefe;
+                    border: 1px solid #ddd;
+                    border-radius: 50%;
+                    width: 30px;
+                    height: 30px;
+                    cursor: pointer;
                 }
                 .listMsg {
                     list-style: inherit;
@@ -2410,6 +2439,8 @@ var index = (function (exports) {
                 }
             </style>
 
+            <button class="closeBtn" @click=${this.handleClose}>x</button>
+
             <ul class="listMsg">
                 ${msgTemplates}
             </ul>
@@ -2418,6 +2449,7 @@ var index = (function (exports) {
                 type="text"
                 .value=${this.msgToSend}
                 @input=${this.handleInput}
+                @keypress=${this.handleKeyPress}
             />
             <button @click=${this.sendMsg}>+</button>
         `;
