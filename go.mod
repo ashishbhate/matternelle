@@ -3,6 +3,7 @@ module github.com/mattermost/mattermost-plugin-sample
 go 1.12
 
 require (
+	github.com/google/uuid v1.1.1
 	github.com/gorilla/websocket v1.4.0
 	github.com/hashicorp/go-hclog v0.9.2 // indirect
 	github.com/hashicorp/go-plugin v1.0.1 // indirect

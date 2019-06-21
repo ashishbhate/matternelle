@@ -16,8 +16,9 @@ import (
 type Plugin struct {
 	plugin.MattermostPlugin
 
-	BotUserID string
-	Users     []*AppUser
+	BotUserID    string
+	Users        []*AppUser
+	Applications []*App
 
 	// configurationLock synchronizes access to the configuration.
 	configurationLock sync.RWMutex
@@ -66,6 +67,13 @@ func (p *Plugin) OnActivate() error {
 	}
 
 	p.BotUserID = botId
+
+	applications, err := p.GetApplicationsFromKVStore()
+	if err != nil {
+		return errors.Wrap(err, "failed to retrieve applications from KVStore")
+	}
+
+	p.Applications = applications
 
 	return p.registerCommand()
 }
