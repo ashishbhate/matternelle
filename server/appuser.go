@@ -8,6 +8,7 @@ type AppUser struct {
 	p      *Plugin
 	c      *websocket.Conn
 	postId string
+	Token  string
 }
 
 func NewAppUser(p *Plugin, c *websocket.Conn) *AppUser {

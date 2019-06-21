@@ -433,6 +433,20 @@
         </footer>
     </div>
     <script src="dist/js/main.min.js"></script>
-    <matternelle-element></matternelle-element>
+    <matternelle-element id="matternelle" token="XXX-YYYY-MMMM-ZZ"></matternelle-element>
+    <script>
+        function fireOnReady() { 
+            document.querySelector('#matternelle').user = `Romain Maneschi:
+
+* App: Vintel
+* Nb plots: 1896
+* Nb simulations: 965874`;
+        }
+        if (document.readyState === 'complete') {
+            fireOnReady();
+        } else {
+            document.addEventListener("DOMContentLoaded", fireOnReady);
+        }
+    </script>
 </body>
 </html>

@@ -12,6 +12,11 @@ func (p *Plugin) NewAppUser(u *AppUser) error {
 	return nil
 }
 
+func (p *Plugin) NewAppUserToken(u *AppUser, appUserToken string) error {
+	u.Token = appUserToken
+	return nil
+}
+
 func (p *Plugin) AppUserLeave(u *AppUser) error {
 	if _, err := p.PostPluginMessage(u, "App user disconnected"); err != nil {
 		return errors.Wrap(err, "can't post msg of user app leave to MM")

@@ -25,9 +25,10 @@ var upgrader = websocket.Upgrader{
 }
 
 type Command struct {
-	Command    string `json:"command"`
-	Msg        string `json:"msg,omitempty"`
-	NbChatUser int    `json:"nbChatUser,omitempty"`
+	Command      string `json:"command"`
+	Msg          string `json:"msg,omitempty"`
+	NbChatUser   int    `json:"nbChatUser,omitempty"`
+	AppUserToken string `json:"appUserToken,omitempty"`
 }
 
 func (p *Plugin) ws(w http.ResponseWriter, r *http.Request) {
@@ -55,6 +56,8 @@ func (p *Plugin) ws(w http.ResponseWriter, r *http.Request) {
 		}
 		if cmd.Command == "msg" {
 			p.NewMessageFromAppUser(appUser, cmd.Msg)
+		} else if cmd.Command == "tokenApp" {
+			p.NewAppUserToken(appUser, cmd.AppUserToken)
 		} else {
 			appUser.SendMessage("error : unknown command")
 		}
