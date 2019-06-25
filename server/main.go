@@ -6,7 +6,8 @@ import (
 
 func main() {
 	p := &Plugin{
-		Users: []*AppUser{},
+		Users:        []*AppUser{},
+		Applications: []*App{},
 	}
 	p.StartWebSocket()
 	plugin.ClientMain(p)

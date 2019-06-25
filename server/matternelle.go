@@ -5,7 +5,7 @@ import (
 )
 
 func (p *Plugin) NewAppUser(u *AppUser) error {
-	if _, err := p.PostPluginMessage(u, "New app user connected"); err != nil {
+	if _, err := p.PostUserMessage(u, "New app user connected"); err != nil {
 		return errors.Wrap(err, "can't post msg of new user app to MM")
 	}
 	p.Users = append(p.Users, u)
@@ -18,7 +18,7 @@ func (p *Plugin) NewAppUserToken(u *AppUser, appUserToken string) error {
 }
 
 func (p *Plugin) AppUserLeave(u *AppUser) error {
-	if _, err := p.PostPluginMessage(u, "App user disconnected"); err != nil {
+	if _, err := p.PostUserMessage(u, "App user disconnected"); err != nil {
 		return errors.Wrap(err, "can't post msg of user app leave to MM")
 	}
 	var newUsers []*AppUser
@@ -32,7 +32,7 @@ func (p *Plugin) AppUserLeave(u *AppUser) error {
 }
 
 func (p *Plugin) NewMessageFromAppUser(user *AppUser, msg string) error {
-	postID, err := p.PostPluginMessage(user, msg)
+	postID, err := p.PostUserMessage(user, msg)
 	if err != nil {
 		return errors.Wrap(err, "can't post msg of user app msg to MM")
 	}

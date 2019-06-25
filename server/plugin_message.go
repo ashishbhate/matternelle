@@ -5,22 +5,32 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (p *Plugin) PostPluginMessage(user *AppUser, msg string) (string, error) {
-	rootID := ""
-	if user != nil {
-		rootID = user.postId
-	}
-	channelID, err := p.GetChannelId()
+func (p *Plugin) PostPluginMessage(channelId string, msg string) (string, error) {
+	post, err := p.API.CreatePost(&model.Post{
+		UserId:    p.BotUserID,
+		ChannelId: channelId,
+		Message:   msg,
+	})
 	if err != nil {
-		return "", errors.Wrap(err, "can't get channel id in postPluginMessage")
+		return "", errors.Wrap(err, "can't create post in postPluginMessage")
 	}
-	if channelID == "" {
+	return post.Id, nil
+}
+
+func (p *Plugin) PostUserMessage(user *AppUser, msg string) (string, error) {
+	ChannelId := ""
+	for _, app := range p.Applications {
+		if user.Token == app.Token {
+			ChannelId = app.ChannelId
+		}
+	}
+	if ChannelId == "" {
 		return "", nil
 	}
 	post, err2 := p.API.CreatePost(&model.Post{
 		UserId:    p.BotUserID,
-		ChannelId: channelID,
-		RootId:    rootID,
+		ChannelId: ChannelId,
+		RootId:    user.postId,
 		Message:   msg,
 	})
 	if err2 != nil {
