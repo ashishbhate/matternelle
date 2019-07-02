@@ -5,15 +5,15 @@ import (
 )
 
 func (p *Plugin) NewAppUser(u *AppUser) error {
-	if _, err := p.PostUserMessage(u, "New app user connected"); err != nil {
-		return errors.Wrap(err, "can't post msg of new user app to MM")
-	}
 	p.Users = append(p.Users, u)
 	return nil
 }
 
 func (p *Plugin) NewAppUserToken(u *AppUser, appUserToken string) error {
 	u.Token = appUserToken
+	if _, err := p.PostUserMessage(u, "New app user connected"); err != nil {
+		return errors.Wrap(err, "can't post msg of new user app to MM")
+	}
 	return nil
 }
 

@@ -55,9 +55,17 @@ func (p *Plugin) ws(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if cmd.Command == "msg" {
-			p.NewMessageFromAppUser(appUser, cmd.Msg)
+			if appUser.Token != "" {
+				if err := p.NewMessageFromAppUser(appUser, cmd.Msg); err != nil {
+					p.API.LogError("err new message from app user", "err", err.Error())
+				}
+			} else {
+				p.API.LogError("can't deliver msg because no token", "msg", cmd.Msg)
+			}
 		} else if cmd.Command == "tokenApp" {
-			p.NewAppUserToken(appUser, cmd.AppUserToken)
+			if err := p.NewAppUserToken(appUser, cmd.AppUserToken); err != nil {
+				p.API.LogError("err new token app user", "err", err.Error())
+			}
 		} else {
 			appUser.SendMessage("error : unknown command")
 		}

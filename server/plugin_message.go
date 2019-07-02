@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/mattermost/mattermost-server/model"
 	"github.com/pkg/errors"
 )
@@ -25,7 +27,7 @@ func (p *Plugin) PostUserMessage(user *AppUser, msg string) (string, error) {
 		}
 	}
 	if ChannelId == "" {
-		return "", nil
+		return "", fmt.Errorf("No app found for token %s", user.Token)
 	}
 	post, err2 := p.API.CreatePost(&model.Post{
 		UserId:    p.BotUserID,

@@ -14,7 +14,7 @@ export class MatternelleElement extends LitElement {
   @property({ type: String, reflect: true })
   user: string = '';
 
-  @property({ type: String, reflect: true })
+  @property({ type: String, reflect: true, attribute: 'token' })
   tokenApp: string = '';
 
   constructor() {
@@ -34,7 +34,7 @@ export class MatternelleElement extends LitElement {
       console.log('Connexion établie.');
       if (this.tokenApp) {
         this.socket.send(
-          JSON.stringify({ command: 'tokenApp', tokenApp: this.tokenApp })
+          JSON.stringify({ command: 'tokenApp', appUserToken: this.tokenApp })
         );
       }
     };

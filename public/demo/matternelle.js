@@ -2421,7 +2421,8 @@ var index = (function (exports) {
     reflect: true
   }), _dec3 = property({
     type: String,
-    reflect: true
+    reflect: true,
+    attribute: 'token'
   }), _dec(_class = (_class2 = (_temp = class MatternelleElement extends LitElement {
     constructor() {
       super();
@@ -2450,9 +2451,10 @@ var index = (function (exports) {
         console.log('Connexion établie.');
 
         if (this.tokenApp) {
+          console.log(`send token ${this.tokenApp}`);
           this.socket.send(JSON.stringify({
             command: 'tokenApp',
-            tokenApp: this.tokenApp
+            appUserToken: this.tokenApp
           }));
         }
       };
