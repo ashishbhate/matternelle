@@ -3,6 +3,7 @@ image: circleci/golang:1.12-node
 stages:
   - test
   - build
+  - release
 
 lint:
   stage: test
@@ -13,4 +14,15 @@ tests:
   stage: test
   script:
     - make test
-    
+
+release:
+  stage: release
+  script:
+    - make
+    - cd webcomponent && npm run build
+  only:
+    - tags
+  artifacts:
+    paths:
+      - dist/*.tar.gz
+      - webcomponent/dist/matternelle.js

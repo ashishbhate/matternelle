@@ -1,8 +1,8 @@
 {
     "id": "com.gitlab.itk.fr.matternelle",
     "name": "Matternelle Plugin",
-    "description": "",
-    "version": "0.1.0",
+    "description": "Transform your mattermost instance to a full featured chat on any WebApp.",
+    "version": "0.2.0",
     "server": {
         "executables": {
             "linux-amd64": "server/dist/plugin-linux-amd64",
