@@ -14,8 +14,16 @@
         "bundle_path": "webapp/dist/main.js"
     },
     "settings_schema": {
-        "header": "",
-        "footer": "",
-        "settings": []
+        "header": "Transform your mattermost instance to a full featured chat on any WebApp.  \n \n Instructions for setup are [available here](https://gitlab.com/itk.fr/matternelle#installation)",
+        "settings": [
+            {
+                "key": "WebSocketPort",
+                "display_name": "WebSocket port",
+                "type": "text",
+                "default": "8989",
+                "help_text": "The port used to communicate in web socket between webcomponent and plugin."
+            }
+        ],
+        "footer": "To report an issue, make a suggestion or a contribution, [check the repository](https://gitlab.com/itk.fr/matternelle)."
     }
 }
