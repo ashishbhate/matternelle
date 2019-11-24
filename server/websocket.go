@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/websocket"
 )
@@ -11,11 +13,18 @@ type connWs struct {
 	c *websocket.Conn
 }
 
-func (p *Plugin) StartWebSocket() {
+func (p *Plugin) StartWebSocket() error {
+	port, err := strconv.ParseInt(p.configuration.WebSocketPort, 10, 0)
+	if err != nil {
+		return err
+	}
 	go func() {
 		http.HandleFunc("/ws", p.ws)
-		log.Fatal(http.ListenAndServe("0.0.0.0:8989", nil))
+
+		log.Fatal(http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", port), nil))
 	}()
+
+	return nil
 }
 
 var upgrader = websocket.Upgrader{

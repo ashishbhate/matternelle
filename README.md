@@ -38,7 +38,7 @@ TODO
     </script>
 </head>
 <body>
-    <matternelle-element id="matternelle" token="XXX-YYYY-MMMM-ZZ"></matternelle-element>
+    <matternelle-element id="matternelle" token="Previous token generated (XXX-YYYY-MMMM-ZZ)" url="Mattermost url with websocket port (127.0.0.1:8989)"></matternelle-element>
     <script>
         function fireOnReady() { 
             document.querySelector('#matternelle').user = `every string details about you user, mattermost understand markdown ;)`;

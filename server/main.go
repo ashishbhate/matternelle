@@ -9,6 +9,5 @@ func main() {
 		Users:        []*AppUser{},
 		Applications: []*App{},
 	}
-	p.StartWebSocket()
 	plugin.ClientMain(p)
 }

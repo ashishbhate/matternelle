@@ -2412,55 +2412,60 @@ var index = (function (exports) {
    */
   LitElement.render = render$1;
 
-  var _dec, _dec2, _dec3, _class, _class2, _descriptor, _descriptor2, _temp;
-  const STATE_HIDDEN = 'hidden';
-  const STATE_SHOW = 'show';
-  const STATE_INPUT = 'input';
-  let MatternelleElement = (_dec = customElement('matternelle-element'), _dec2 = property({
+  var _dec, _dec2, _dec3, _dec4, _class, _class2, _descriptor, _descriptor2, _descriptor3, _temp;
+  const STATE_HIDDEN = "hidden";
+  const STATE_SHOW = "show";
+  const STATE_INPUT = "input";
+  let MatternelleElement = (_dec = customElement("matternelle-element"), _dec2 = property({
     type: String,
     reflect: true
   }), _dec3 = property({
     type: String,
     reflect: true,
-    attribute: 'token'
+    attribute: "token"
+  }), _dec4 = property({
+    type: String,
+    reflect: true,
+    attribute: "url"
   }), _dec(_class = (_class2 = (_temp = class MatternelleElement extends LitElement {
     constructor() {
       super();
       this.socket = null;
       this.state = STATE_HIDDEN;
-      this.msgToSend = '';
+      this.msgToSend = "";
       this.msg = [];
 
       _initializerDefineProperty(this, "user", _descriptor, this);
 
       _initializerDefineProperty(this, "tokenApp", _descriptor2, this);
 
+      _initializerDefineProperty(this, "serverUrl", _descriptor3, this);
+
       this.initWS();
     }
 
     initWS() {
-      this.msgToSend = '';
+      this.msgToSend = "";
       this.msg = [];
-      this.socket = new WebSocket('ws://127.0.0.1:8989/ws'); //'ws://127.0.0.1:8065/plugins/com.gitlab.itk.fr.matternelle/ws'
+      this.socket = new WebSocket(`ws://${this.serverUrl}/ws`);
 
       this.socket.onerror = error => {
         console.error(error);
       };
 
       this.socket.onopen = () => {
-        console.log('Connexion établie.');
+        console.log("Connexion établie.");
 
         if (this.tokenApp) {
-          console.log(`send token ${this.tokenApp}`);
           this.socket.send(JSON.stringify({
-            command: 'tokenApp',
+            command: "tokenApp",
             appUserToken: this.tokenApp
           }));
         }
       };
 
       this.socket.onclose = () => {
-        console.log('Connexion terminé.');
+        console.log("Connexion terminé.");
         setTimeout(() => {
           this.initWS();
         }, 3000);
@@ -2468,14 +2473,14 @@ var index = (function (exports) {
 
       this.socket.onmessage = event => {
         const msg = JSON.parse(event.data);
-        console.log('Message:', msg);
+        console.log("Message:", msg);
 
-        if (msg.command === 'nbChatUser' && msg.nbChatUser !== undefined && msg.nbChatUser > 0) {
+        if (msg.command === "nbChatUser" && msg.nbChatUser !== undefined && msg.nbChatUser > 0) {
           this.state = STATE_SHOW;
 
           if (this.user) {
             this.socket.send(JSON.stringify({
-              command: 'msg',
+              command: "msg",
               msg: this.user
             }));
           }
@@ -2487,16 +2492,16 @@ var index = (function (exports) {
     }
 
     attributeChangedCallback(name, oldval, newval) {
-      console.log('attribute change: ', name, newval);
+      console.log("attribute change: ", name, newval);
 
-      if (name === 'user' && this.state !== STATE_HIDDEN) {
+      if (name === "user" && this.state !== STATE_HIDDEN) {
         this.socket.send(JSON.stringify({
-          command: 'msg',
+          command: "msg",
           msg: this.user
         }));
-      } else if (name === 'token' && this.state !== STATE_HIDDEN) {
+      } else if (name === "token" && this.state !== STATE_HIDDEN) {
         JSON.stringify({
-          command: 'tokenApp',
+          command: "tokenApp",
           tokenApp: this.tokenApp
         });
       }
@@ -2520,8 +2525,8 @@ var index = (function (exports) {
     }
 
     handleKeyPress(e) {
-      if (e.target.value !== '') {
-        if (e.key === 'Enter') {
+      if (e.target.value !== "") {
+        if (e.key === "Enter") {
           this.sendMsg();
         }
       }
@@ -2529,19 +2534,19 @@ var index = (function (exports) {
 
     sendMsg() {
       const msg = {
-        command: 'msg',
+        command: "msg",
         msg: this.msgToSend,
         byAppUser: true
       };
       this.msg = [...this.msg, msg];
       this.socket.send(JSON.stringify(msg));
-      this.msgToSend = '';
+      this.msgToSend = "";
       this.requestUpdate();
     }
 
     render() {
-      const msgTemplates = this.msg.filter(i => i.command === 'msg').map(i => html`
-            <li class="${i.byAppUser ? 'byAppUser' : ''}">
+      const msgTemplates = this.msg.filter(i => i.command === "msg").map(i => html`
+            <li class="${i.byAppUser ? "byAppUser" : ""}">
               ${i.msg}
             </li>
           `);
@@ -2635,14 +2640,21 @@ var index = (function (exports) {
     enumerable: true,
     writable: true,
     initializer: function () {
-      return '';
+      return "";
     }
   }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "tokenApp", [_dec3], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: function () {
-      return '';
+      return "";
+    }
+  }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "serverUrl", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return "";
     }
   })), _class2)) || _class);
 
