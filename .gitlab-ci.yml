@@ -15,11 +15,17 @@ tests:
   script:
     - make test
 
+build:
+  stage: build
+  script:
+    - make
+    - cd webcomponent && npm install && npm run build
+
 release:
   stage: release
   script:
     - make
-    - cd webcomponent && npm run build
+    - cd webcomponent && npm install && npm run build
   only:
     - tags
   artifacts:
