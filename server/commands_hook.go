@@ -17,13 +17,19 @@ const CommandList = CommandMatternelle + " list"
 const CommandOn = CommandMatternelle + " on"
 const CommandOff = CommandMatternelle + " off"
 
+const COMMAND_HELP = `* |/matternelle init appName| - Add a new web app, named appName in this channel
+* |/matternelle remove appName| - Delete a previous created web app in this channel
+* |/matternelle on| - Join the support to respond to external users for this channel (if nobody can respond plugin will hide button in webapp)
+* |/matternelle off| - Finish your session support in this channel
+* |/matternelle list| - List all webapp of this channel`
+
 func (p *Plugin) registerCommand() error {
 	if err := p.API.RegisterCommand(&model.Command{
 		Trigger:          "matternelle",
 		DisplayName:      "Matternelle",
 		AutoComplete:     true,
 		AutoCompleteHint: "[command]",
-		AutoCompleteDesc: "Available commands: init, on, off",
+		AutoCompleteDesc: "Available commands: init, on, off, list, remove, help",
 	}); err != nil {
 		return errors.Wrap(err, "failed to register command")
 	}
@@ -82,6 +88,6 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 	}
 	return &model.CommandResponse{
 		ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
-		Text:         fmt.Sprintf("Unknown command: %s", args.Command),
+		Text:         "###### Mattermost Matternelle Plugin - Slash Command Help\n" + strings.Replace(COMMAND_HELP, "|", "`", -1),
 	}, nil
 }
