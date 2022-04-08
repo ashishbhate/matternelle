@@ -2,6 +2,8 @@
 
 Transform your mattermost instance to a full featured chat on any WebApp.
 
+Forked from: https://gitlab.com/itk.fr/matternelle/
+
 > The plugin is currently in alpha! Use it with caution!
 
 ![Matternelle Plugin screenshot](./screenshot.png)
