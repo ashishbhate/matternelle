@@ -88,4 +88,4 @@ make deploy && cd webcomponent/ && npm start
 
 ## Feedback and Feature Requests
 
-Feel free to create a [GitLab issue](https://gitlab.com/itk.fr/matternelle/issues).
+Feel free to create a [Github issue](https://github.com/ashishbhate/matternelle/issues).
