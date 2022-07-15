@@ -6,8 +6,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/mattermost/mattermost-server/model"
-	"github.com/mattermost/mattermost-server/plugin"
+	"github.com/mattermost/mattermost-server/v6/model"
+	"github.com/mattermost/mattermost-server/v6/plugin"
 )
 
 const CommandMatternelle = "/matternelle"
@@ -49,7 +49,7 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 
 		if appName == "" {
 			return &model.CommandResponse{
-				ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
+				ResponseType: model.CommandResponseTypeEphemeral,
 				Text:         "Init command must be followed by the app name",
 			}, nil
 		}
@@ -63,7 +63,7 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 
 		if appName == "" {
 			return &model.CommandResponse{
-				ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
+				ResponseType: model.CommandResponseTypeEphemeral,
 				Text:         "Remove command must be followed by the app name",
 			}, nil
 		}
@@ -87,7 +87,7 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 		return &model.CommandResponse{}, nil
 	}
 	return &model.CommandResponse{
-		ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
+		ResponseType: model.CommandResponseTypeEphemeral,
 		Text:         "###### Mattermost Matternelle Plugin - Slash Command Help\n" + strings.Replace(COMMAND_HELP, "|", "`", -1),
 	}, nil
 }

@@ -8,13 +8,15 @@ import (
 	"reflect"
 	"sync"
 
-	"github.com/mattermost/mattermost-server/model"
-	"github.com/mattermost/mattermost-server/plugin"
+	pluginapi "github.com/mattermost/mattermost-plugin-api"
+	"github.com/mattermost/mattermost-server/v6/model"
+	"github.com/mattermost/mattermost-server/v6/plugin"
 	"github.com/pkg/errors"
 )
 
 type Plugin struct {
 	plugin.MattermostPlugin
+	client *pluginapi.Client
 
 	BotUserID    string
 	Users        []*AppUser
@@ -61,6 +63,7 @@ func echo(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *Plugin) OnActivate() error {
+	p.client = pluginapi.NewClient(p.API, p.Driver)
 	botId, err := p.createOrRetrieveBot()
 	if err != nil {
 		return errors.Wrap(err, "failed to create or retrieve Matternelle bot")
@@ -79,7 +82,7 @@ func (p *Plugin) OnActivate() error {
 }
 
 func (p *Plugin) createOrRetrieveBot() (string, error) {
-	botId, err := p.Helpers.EnsureBot(&model.Bot{
+	botId, err := p.client.Bot.EnsureBot(&model.Bot{
 		Username:    "matternelle",
 		DisplayName: "Matternelle",
 		Description: "A bot account created by the plugin Matternelle",
