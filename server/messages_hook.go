@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/mattermost/mattermost-server/model"
-	"github.com/mattermost/mattermost-server/plugin"
+	"github.com/mattermost/mattermost-server/v6/model"
+	"github.com/mattermost/mattermost-server/v6/plugin"
 )
 
 func (p *Plugin) MessageHasBeenPosted(c *plugin.Context, post *model.Post) {
