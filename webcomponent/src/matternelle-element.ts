@@ -7,7 +7,7 @@ const STATE_INPUT = "input";
 @customElement("matternelle-element")
 export class MatternelleElement extends LitElement {
   private socket: WebSocket | null = null;
-  private state: "hidden" | "show" | "input" = STATE_HIDDEN;
+  private state: "hidden" | "show" | "input" = STATE_SHOW;
   private msgToSend: string = "";
   private msg: Array<any> = [];
 
@@ -22,6 +22,9 @@ export class MatternelleElement extends LitElement {
 
   constructor() {
     super();
+  }
+
+  firstUpdated() {
     this.initWS();
   }
 

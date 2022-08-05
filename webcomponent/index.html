@@ -9,15 +9,16 @@
   </script> 
 
   <!-- Load components via WebComponents.waitFor -->
-  <script type="module">
-    window.WebComponents = window.WebComponents || { 
-      waitFor(cb){ addEventListener('WebComponentsReady', cb) }
-    } 
-    WebComponents.waitFor(async () => { 
-      import('./src/matternelle-element.js');
-    });
-  </script>
-  
+<script type="module">
+   window.WebComponents = window.WebComponents || {
+       waitFor(cb){ addEventListener('WebComponentsReady', cb) }
+   }
+   WebComponents.waitFor(async () => {
+       import('./dist/matternelle.js');
+   });
+</script>
+
+
   <!-- Change stuff here for your app -->
   <meta name="description" content="matternelle-element">
   <meta name="theme-color" content="#ffffff">
@@ -29,11 +30,17 @@
 </head>
 <body>
   
-  <matternelle-element style="max-width: 500px;">
+  <matternelle-element style="max-width: 500px;" id="matternelle" token="" url="">
     <!-- Check for JavaScript -->
-    <p id="jsyes"></p>
-    <script type="text/javascript">
-      document.getElementById('jsyes').innerHTML='Loading...';
+    <script>
+        function fireOnReady() {
+            document.querySelector('#matternelle').user = `Matternelle User`;
+        }
+        if (document.readyState === 'complete') {
+            fireOnReady();
+        } else {
+            document.addEventListener("DOMContentLoaded", fireOnReady);
+        }
     </script>
     <noscript>
       Could not render the custom element. Check that JavaScript is enabled.

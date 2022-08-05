@@ -4,8 +4,8 @@
   "description": "link your web app with your mattermost",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build && cd ../public/demo/ && polymer serve --hostname 0.0.0.0",
-    "build": "rollup -c && cp dist/matternelle.js ../public/demo/",
+    "start": "npm run build && polymer serve --hostname 0.0.0.0",
+    "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
