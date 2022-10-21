@@ -18,20 +18,18 @@ Forked from: https://gitlab.com/itk.fr/matternelle/
 ## Installation
 
 1. Install the plugin
-    1. Download the latest **release** files from the [GitLab releases page](https://gitlab.com/itk.fr/matternelle/-/tags)
-![](download_release.png)
+    1. This fork doesn't have releases yet. The plugin can be built and bundled by running `make dist`. The g-zipped bundle will be saved in the `dist` folder.
     2. In Mattermost, go the System Console -> Plugins -> Management
-    3. Upload the plugin which is `dist/com.gitlab.itk.fr.matternelle-0.2.0.tar.gz` inside the previous **release** downloaded
-    4. Enable the plugin and modifi configration if needed
+    3. Upload the plugin bundle built in step 1. The g-zipped bundle can be found in the `dist` folder.
+    4. Enable the plugin and modify the configration as needed
 2. Install the webcomponent
-    1. Inside the **release** downloaded there is a `webcomponent/dist/matternelle.js` file
-    2. Unzip it inside your web server
-    3. see usage section to use it
+    1. Build the webcomponent by running `npm run build` in the `webcomponent` folder. This will create a `matternelle.js` file in the `webcomponent/dist` folder.
+    2. see usage section to use it
 
 ## Usage
 
 * Go to a mattermost channel and enter `/matternelle init appName` it will give you a unique token
-* In any webapp add :
+* In any webapp add:
 
 ```html
 <head>
@@ -52,7 +50,7 @@ Forked from: https://gitlab.com/itk.fr/matternelle/
     <matternelle-element id="matternelle" token="Previous token generated (XXX-YYYY-MMMM-ZZ)" url="Mattermost url without protocol but with websocket port (127.0.0.1:8989)"></matternelle-element>
     <script>
         function fireOnReady() { 
-            document.querySelector('#matternelle').user = `every string details about you user, mattermost understand markdown ;)`;
+            document.querySelector('#matternelle').user = `Matternelle user`;
         }
         if (document.readyState === 'complete') {
             fireOnReady();
@@ -62,7 +60,7 @@ Forked from: https://gitlab.com/itk.fr/matternelle/
     </script>
 </body>
 ```
-
+* See the `index.html` file in the `webcomponent` folder for an example.
 * Every time a user will ask for help, it will build a new thread in your mattermost channel
 * Every time someone respond to this thread, user will be notified in app
 
